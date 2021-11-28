@@ -10,14 +10,14 @@ const app = (req, res) => {
 
         if (req.url.match(/^\/person\/?$/) && req.method === "GET") {
             res.statusCode = 200;
-            res.write(JSON.stringify(data));
+            res.end(JSON.stringify(data));
         } else if (req.url.match(/^\/person\/?$/) && req.method === "POST") {
             let body = "";
             req.on("data", chunk => {
                 body += chunk;
             });
             req.on('end', () => {
-                const person = data.find(_ => _.id === qs.parse(`${body}`).id);
+                const person = data && data.find(_ => _.id === qs.parse(`${body}`).id);
                 const parsedBody = qs.parse(`${body}`);
                 parsedBody.id = v1();
                 if (person) {
@@ -29,14 +29,14 @@ const app = (req, res) => {
                 } else {
                     res.statusCode = 201;
                     data.push(parsedBody);
-                    res.write(JSON.stringify(parsedBody));
+                    res.end(JSON.stringify(parsedBody));
                 }
             });
         } else if (req.url.match(/^\/person\/[a-z0-9\-]+$/) && req.method === "GET") {
                 const person = data.find(_ => _.id === req.url.split("/").slice(-1)[0]);
                 if (person && validate(person.id)) {
                     res.statusCode = 200;
-                    res.write(JSON.stringify(person));
+                    res.end(JSON.stringify(person));
                 } else if (person && !validate(person.id)) {
                     res.statusCode = 400;
                     res.end("Error: Person's id doesn't correspond to uuid v1");
@@ -69,13 +69,13 @@ const app = (req, res) => {
             if (personIndex > -1 && data[personIndex] && validate(data[personIndex].id)) {
                 data.splice(personIndex, 1);
                 res.statusCode = 204;
-                res.write("[]");
+                res.end("[]");
             } else if (data[personIndex] && !validate(data[personIndex].id)) {
                 res.statusCode = 400;
                 res.end("Error: Person's id doesn't correspond to uuid v1");
             } else {
                 res.statusCode = 404;
-                res.write("Error: Person is not found");
+                res.end("Error: Person is not found");
             }
         } else {
             res.statusCode = 404;
