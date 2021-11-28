@@ -1,9 +1,4 @@
 const app = require('../src/app');
-const qs = require("qs");
-const isValid = require("../src/utils/validator");
-const { v1, validate } = require('uuid');
-const http = require("http");
-const { PORT } = require('../src/common/config');
 
 
 
