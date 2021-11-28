@@ -5,9 +5,6 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "dev": "webpack-dev-server --hot --env dev",
-    "build:dev": "webpack --env dev --progress --profile --colors",
-    "build:prod": "webpack --env prod --progress --profile --colors",
     "test": "jest --watch"
   },
   "repository": {
